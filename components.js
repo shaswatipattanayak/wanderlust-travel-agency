@@ -83,3 +83,30 @@ function injectFooter() {
   </footer>`;
   document.body.insertAdjacentHTML('beforeend', footer);
 }
+
+// ── SCROLL TO TOP BUTTON ──
+function injectScrollTopBtn() {
+  // Create the button
+  const btn = document.createElement('button');
+  btn.className = 'scroll-top-btn';
+  btn.setAttribute('aria-label', 'Scroll to top');
+  btn.innerHTML = '&#8679;'; // ↑ arrow
+  document.body.appendChild(btn);
+
+  // Show/hide based on scroll position
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  // Smooth scroll to top on click
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// Auto-run when components.js loads
+injectScrollTopBtn();
