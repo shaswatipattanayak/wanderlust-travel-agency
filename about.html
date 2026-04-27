@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | WanderLust</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ── STORY SECTION ── */
+    .story {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .story-images {
+      position: relative;
+    }
+
+    .story-img-main {
+      width: 100%;
+      border-radius: 24px;
+      height: 480px;
+      object-fit: cover;
+      box-shadow: 0 24px 60px rgba(12,27,51,0.18);
+    }
+
+    .story-img-accent {
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 200px;
+      height: 200px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 6px solid white;
+      box-shadow: 0 12px 30px rgba(12,27,51,0.14);
+    }
+
+    .founded-badge {
+      position: absolute;
+      top: 24px;
+      left: -20px;
+      background: linear-gradient(135deg, var(--fire), var(--sun));
+      color: white;
+      padding: 16px 20px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(255,77,28,0.3);
+    }
+
+    .founded-badge .year {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      display: block;
+      line-height: 1;
+    }
+
+    .founded-badge .label {
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .story-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--deep);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .story-text p {
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .story-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .s-stat {
+      background: var(--sand);
+      border-radius: 16px;
+      padding: 1.4rem;
+      border-left: 4px solid var(--fire);
+    }
+
+    .s-stat .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--deep);
+      display: block;
+    }
+
+    .s-stat .lbl {
+      color: var(--gray);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    /* ── VALUES ── */
+    .values {
+      background: var(--deep);
+      padding: 5rem 2rem;
+    }
+
+    .values-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .values-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .values-header .section-title { color: white; }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .value-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .value-card:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-4px);
+    }
+
+    .value-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+
+    .value-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.7rem;
+    }
+
+    .value-card p {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .how-header { text-align: center; margin-bottom: 3.5rem; }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      position: relative;
+    }
+
+    .how-grid::before {
+      content: '';
+      position: absolute;
+      top: 25px;
+      left: calc(12.5% + 25px);
+      right: calc(12.5% + 25px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--fire), var(--sun));
+      opacity: 0.3;
+    }
+
+    /* ── TEAM ── */
+    .team {
+      padding: 5rem 2rem;
+      background: white;
+    }
+
+    .team-inner { max-width: 1200px; margin: 0 auto; }
+    .team-header { text-align: center; margin-bottom: 3rem; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ── GALLERY ── */
+    .gallery {
+      padding: 5rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-header { text-align: center; margin-bottom: 2.5rem; }
+
+    @media (max-width: 768px) {
+      .story-grid { grid-template-columns: 1fr; }
+      .story-img-accent { display: none; }
+      .founded-badge { left: 10px; }
+      .how-grid::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<script src="components.js"></script>
+<script>injectNav('about');</script>
+
+<!-- PAGE HERO -->
+<div class="page-hero" style="background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
+  <div style="position:absolute;inset:0;background:rgba(12,27,51,0.7);"></div>
+  <div style="position:relative;z-index:1;text-align:center;">
+    <span class="page-hero-tag">Our Story</span>
+    <h1>Born to Wander</h1>
+    <p>A passionate team of explorers dedicated to crafting once-in-a-lifetime journeys.</p>
+  </div>
+</div>
+
+<!-- ── STORY ── -->
+<section class="story">
+  <div class="story-grid">
+    <div class="story-images">
+      <div class="founded-badge">
+        <span class="year">2014</span>
+        <span class="label">Founded</span>
+      </div>
+      <img class="story-img-main" src="https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=900&q=80" alt="Travel adventure">
+      <img class="story-img-accent" src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=400&q=80" alt="Mountain adventure">
+    </div>
+    <div class="story-text">
+      <span class="section-tag">Who We Are</span>
+      <h2>Your Journey Starts With Our Passion</h2>
+      <p>WanderLust was born from a simple belief: travel should transform you. Founded by two backpackers who quit their desk jobs to cross four continents, we started as a blog and grew into a full-service travel agency trusted by 50,000+ travelers worldwide.</p>
+      <p>We don't just book holidays — we architect experiences. Every itinerary is hand-crafted by someone who has personally walked that path, eaten at that hidden restaurant, and knows exactly which corner of the globe will make your heart sing.</p>
+      <p>Our team of 80+ travel specialists spans 25 countries, ensuring local expertise at every destination we serve.</p>
+      <div class="story-stats">
+        <div class="s-stat">
+          <span class="num">50K+</span>
+          <span class="lbl">Happy Travelers</span>
+        </div>
+        <div class="s-stat">
+          <span class="num">150+</span>
+          <span class="lbl">Destinations</span>
+        </div>
+        <div class="s-stat">
+          <span class="num">10+</span>
+          <span class="lbl">Years of Experience</span>
+        </div>
+        <div class="s-stat">
+          <span class="num">4.9★</span>
+          <span class="lbl">Average Rating</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUES ── -->
+<section class="values">
+  <div class="values-inner">
+    <div class="values-header">
+      <span class="section-tag" style="background:rgba(255,77,28,0.25);color:var(--sun);">Our DNA</span>
+      <h2 class="section-title" style="color:white; margin-top:0.5rem;">What Drives Us</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <span class="value-icon">🧭</span>
+        <h3>Authenticity</h3>
+        <p>No cookie-cutter tours. Every experience is real, raw, and deeply local.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">🌍</span>
+        <h3>Sustainability</h3>
+        <p>We partner only with eco-certified operators and offset every trip's carbon footprint.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">❤️</span>
+        <h3>Care</h3>
+        <p>24/7 support from people who genuinely care — not chatbots, not call centers.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">✨</span>
+        <h3>Excellence</h3>
+        <p>We obsess over every detail so you don't have to. Perfection is our standard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how">
+  <div class="how-header">
+    <span class="section-tag">The Process</span>
+    <h2 class="section-title">How We Build Your Trip</h2>
+  </div>
+  <div class="how-grid">
+    <div class="step" style="flex-direction:column; align-items:center; text-align:center;">
+      <div class="step-num">1</div>
+      <div style="margin-top:1rem;">
+        <h4>Tell Us Your Dream</h4>
+        <p>Fill our quick form or call us. We listen first — always.</p>
+      </div>
+    </div>
+    <div class="step" style="flex-direction:column; align-items:center; text-align:center;">
+      <div class="step-num">2</div>
+      <div style="margin-top:1rem;">
+        <h4>Expert Planning</h4>
+        <p>Your dedicated travel expert crafts a custom itinerary within 24 hours.</p>
+      </div>
+    </div>
+    <div class="step" style="flex-direction:column; align-items:center; text-align:center;">
+      <div class="step-num">3</div>
+      <div style="margin-top:1rem;">
+        <h4>Review & Refine</h4>
+        <p>We tweak until it's perfect. Your approval, your pace, your style.</p>
+      </div>
+    </div>
+    <div class="step" style="flex-direction:column; align-items:center; text-align:center;">
+      <div class="step-num">4</div>
+      <div style="margin-top:1rem;">
+        <h4>Go & Explore</h4>
+        <p>Travel with confidence. We're one call away the entire journey.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="team">
+  <div class="team-inner">
+    <div class="team-header">
+      <span class="section-tag">The Humans</span>
+      <h2 class="section-title">Meet the Team</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGBWuMd6v0vwg/profile-displayphoto-shrink_200_200/B4DZd2_umRHkAY-/0/1750048108229?e=1778716800&v=beta&t=0wEddiEWXov8kFNqzi1yExAAdJh9nmv3fzxP3FJa17o" alt="CEO">
+        <!-- <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="CEO"> -->
+        <div class="info">
+          <div class="name">Shaswati Pattanayak</div>
+          <div class="role">Co-Founder & CEO</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80" alt="Travel Director">
+        <div class="info">
+          <div class="name">Priya Sharma</div>
+          <div class="role">Head of Experiences</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" alt="Operations">
+        <div class="info">
+          <div class="name">James Osei</div>
+          <div class="role">Operations Director</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="Marketing">
+        <div class="info">
+          <div class="name">Luna Reyes</div>
+          <div class="role">Brand & Marketing</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHOTO GALLERY ── -->
+<section class="gallery">
+  <div class="gallery-header">
+    <span class="section-tag">Behind the Lens</span>
+    <h2 class="section-title">Adventures We've Lived</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item g1">
+      <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=900&h=600&q=80" alt="Patagonia" style="min-height:400px;">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=500&q=80" alt="Hiking">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=500&q=80" alt="Mountains">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=500&q=80" alt="Beach">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?auto=format&fit=crop&w=500&q=80" alt="Desert">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=500&q=80" alt="City">
+    </div>
+  </div>
+</section>
+
+<script>injectFooter();</script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destinations | WanderLust</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .dest-section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dest-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+
+    .dest-count {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .dest-count span {
+      color: var(--deep);
+      font-weight: 700;
+    }
+
+    .dest-all-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .dest-full-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(12,27,51,0.06);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: none;
+    }
+
+    .dest-full-card.visible {
+      display: block;
+    }
+
+    .dest-full-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(12,27,51,0.12);
+    }
+
+    .dest-full-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .dest-full-card:hover img { transform: scale(1.05); }
+
+    .dest-full-card .card-body { padding: 1.5rem; }
+
+    .dest-full-card .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .dest-full-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--deep);
+      margin-bottom: 0.5rem;
+    }
+
+    .dest-full-card p {
+      color: var(--gray);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .dest-full-card .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price-from {
+      font-size: 0.78rem;
+      color: var(--gray);
+    }
+
+    .price-from strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--fire);
+      font-weight: 900;
+    }
+
+    .region-badge {
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .region-asia { background: rgba(255,154,60,0.12); color: #C2570A; }
+    .region-europe { background: rgba(14,165,233,0.12); color: #0369A1; }
+    .region-africa { background: rgba(34,197,94,0.12); color: #15803D; }
+    .region-americas { background: rgba(168,85,247,0.12); color: #7C3AED; }
+    .region-oceania { background: rgba(236,72,153,0.12); color: #BE185D; }
+
+    .no-results {
+      text-align: center;
+      padding: 4rem 2rem;
+      grid-column: 1/-1;
+      display: none;
+    }
+
+    .no-results.show { display: block; }
+    .no-results h3 { font-size: 1.3rem; color: var(--deep); margin-bottom: 0.5rem; }
+    .no-results p { color: var(--gray); }
+
+    /* Map CTA */
+    .map-cta {
+      background: linear-gradient(135deg, var(--deep) 0%, var(--moss) 100%);
+      border-radius: 24px;
+      padding: 3rem;
+      text-align: center;
+      margin: 3rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-cta::before {
+      content: '🌍';
+      position: absolute;
+      font-size: 12rem;
+      opacity: 0.05;
+      top: -2rem;
+      right: -2rem;
+    }
+
+    .map-cta h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 0.8rem;
+    }
+
+    .map-cta p { color: rgba(255,255,255,0.6); margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+
+<script src="components.js"></script>
+<script>injectNav('destinations');</script>
+
+<!-- PAGE HERO -->
+<div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1600&q=80'); background-size:cover; background-position:center;">
+  <div style="position:absolute;inset:0;background:rgba(12,27,51,0.65);"></div>
+  <div style="position:relative;z-index:1;text-align:center;padding:0 1.5rem;">
+    <span class="page-hero-tag">Explore</span>
+    <h1>The World Awaits</h1>
+    <p>150+ handpicked destinations across 6 continents. Find yours.</p>
+  </div>
+</div>
+
+<!-- ── DESTINATIONS ── -->
+<section class="dest-section">
+  <!-- Controls -->
+  <div class="dest-controls">
+    <div class="search-bar" style="max-width:380px;">
+      <input type="text" id="destSearch" placeholder="Search destination..." oninput="filterDests()">
+      <button onclick="filterDests()"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" onclick="setFilter('all', this)">All</button>
+      <button class="filter-tab" onclick="setFilter('asia', this)">🌏 Asia</button>
+      <button class="filter-tab" onclick="setFilter('europe', this)">🏰 Europe</button>
+      <button class="filter-tab" onclick="setFilter('africa', this)">🌍 Africa</button>
+      <button class="filter-tab" onclick="setFilter('americas', this)">🗺 Americas</button>
+      <button class="filter-tab" onclick="setFilter('oceania', this)">🌊 Oceania</button>
+    </div>
+    <div class="dest-count">Showing <span id="visibleCount">12</span> destinations</div>
+  </div>
+
+  <!-- Grid -->
+  <div class="dest-all-grid" id="destGrid">
+
+    <div class="dest-full-card visible" data-region="asia" data-name="bali indonesia">
+      <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=600&q=80" alt="Bali">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-asia">Asia</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.9</span>
+        </div>
+        <h3>Bali, Indonesia</h3>
+        <p>Tropical paradise with ancient temples, lush rice terraces, and world-class surf breaks.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$899</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="europe" data-name="santorini greece">
+      <img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80" alt="Santorini">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-europe">Europe</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.8</span>
+        </div>
+        <h3>Santorini, Greece</h3>
+        <p>Iconic whitewashed villages perched on volcanic cliffs above the stunning Aegean Sea.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,199</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="asia" data-name="tokyo japan">
+      <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80" alt="Tokyo">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-asia">Asia</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 5.0</span>
+        </div>
+        <h3>Tokyo, Japan</h3>
+        <p>Where ancient temples meet neon-lit streets — the most electrifying city on Earth.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,499</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="americas" data-name="patagonia chile argentina">
+      <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80" alt="Patagonia">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-americas">Americas</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.9</span>
+        </div>
+        <h3>Patagonia, Chile</h3>
+        <p>Glaciers, granite peaks, and raw wilderness at the bottom of the world.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$2,199</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="africa" data-name="serengeti tanzania safari">
+      <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=80" alt="Serengeti">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-africa">Africa</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.9</span>
+        </div>
+        <h3>Serengeti, Tanzania</h3>
+        <p>Witness the great wildebeest migration across Africa's most iconic savanna.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$2,899</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="europe" data-name="amalfi coast italy">
+      <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=600&q=80" alt="Amalfi">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-europe">Europe</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.8</span>
+        </div>
+        <h3>Amalfi Coast, Italy</h3>
+        <p>Clifftop villages, lemon groves, and sapphire waters along Italy's most dramatic coastline.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,399</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="oceania" data-name="new zealand fjordland milford">
+      <img src="https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=600&q=80" alt="New Zealand">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-oceania">Oceania</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 5.0</span>
+        </div>
+        <h3>Fjordland, New Zealand</h3>
+        <p>Middle-earth comes alive with soaring fiords, glowworm caves, and volcanic lakes.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,899</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="asia" data-name="rajasthan india">
+      <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80" alt="Rajasthan">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-asia">Asia</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.7</span>
+        </div>
+        <h3>Rajasthan, India</h3>
+        <p>Golden deserts, medieval forts, and the most vivid colours you'll ever photograph.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$799</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="americas" data-name="machu picchu peru">
+      <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80" alt="Machu Picchu">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-americas">Americas</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.9</span>
+        </div>
+        <h3>Machu Picchu, Peru</h3>
+        <p>The lost Inca city in the clouds — one of humanity's most awe-inspiring achievements.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,699</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="africa" data-name="morocco marrakech sahara">
+      <img src="https://images.unsplash.com/photo-1539020140153-e479b8fbe0cb?auto=format&fit=crop&w=600&q=80" alt="Morocco">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-africa">Africa</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.8</span>
+        </div>
+        <h3>Marrakech, Morocco</h3>
+        <p>Ancient medinas, Sahara dunes, and spice-scented souks — sensory overload in the best way.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$999</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="europe" data-name="iceland northern lights aurora">
+      <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=600&q=80" alt="Iceland">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-europe">Europe</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 4.9</span>
+        </div>
+        <h3>Iceland</h3>
+        <p>Chase the Northern Lights across volcanic landscapes, geysers, and midnight sun.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$1,599</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-full-card visible" data-region="oceania" data-name="maldives islands overwater bungalow">
+      <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80" alt="Maldives">
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="region-badge region-oceania">Oceania</span>
+          <span style="color:var(--gold);font-size:0.82rem;">★ 5.0</span>
+        </div>
+        <h3>Maldives</h3>
+        <p>Overwater bungalows, crystal lagoons, and the purest turquoise waters on the planet.</p>
+        <div class="card-footer">
+          <div class="price-from">From<strong>$2,499</strong></div>
+          <a href="packages.html" class="btn btn-primary" style="padding:9px 20px;font-size:0.82rem;">View Package</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- No results message -->
+    <div class="no-results" id="noResults">
+      <div style="font-size:3rem; margin-bottom:1rem;">🔍</div>
+      <h3>No destinations found</h3>
+      <p>Try a different search term or filter.</p>
+    </div>
+  </div>
+
+  <!-- Map CTA -->
+  <div class="map-cta">
+    <h3>Can't Find What You're Looking For?</h3>
+    <p>Our travel experts can plan a custom trip to literally anywhere on Earth.</p>
+    <a href="contact.html" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Talk to an Expert</a>
+  </div>
+</section>
+
+<script>injectFooter();</script>
+<script src="script.js"></script>
+<script>
+  let currentFilter = 'all';
+
+  function setFilter(region, btn) {
+    currentFilter = region;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    filterDests();
+  }
+
+  function filterDests() {
+    const query = document.getElementById('destSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('.dest-full-card');
+    let count = 0;
+    cards.forEach(card => {
+      const name = card.dataset.name;
+      const region = card.dataset.region;
+      const matchRegion = currentFilter === 'all' || region === currentFilter;
+      const matchQuery = !query || name.includes(query);
+      if (matchRegion && matchQuery) {
+        card.classList.add('visible');
+        count++;
+      } else {
+        card.classList.remove('visible');
+      }
+    });
+    document.getElementById('visibleCount').textContent = count;
+    document.getElementById('noResults').classList.toggle('show', count === 0);
+  }
+
+  // Check URL params for search query from homepage
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('q')) {
+    document.getElementById('destSearch').value = params.get('q');
+    filterDests();
+  }
+</script>
+</body>
+</html>

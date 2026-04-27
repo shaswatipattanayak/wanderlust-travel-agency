@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Packages | WanderLust</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .pkg-section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .pkg-section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .pkg-section-header p {
+      color: var(--gray);
+      max-width: 500px;
+      margin: 0.8rem auto 0;
+    }
+
+    /* Featured package */
+    .featured-pkg {
+      background: linear-gradient(135deg, var(--deep) 0%, var(--moss) 100%);
+      border-radius: 28px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 3rem;
+      min-height: 420px;
+      position: relative;
+    }
+
+    .featured-pkg-img {
+      position: relative;
+    }
+
+    .featured-pkg-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      background: var(--fire);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .featured-pkg-content {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .featured-pkg-content .pkg-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-pkg-content .pkg-sub {
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .featured-pkg-features {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+
+    .featured-pkg-features li {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.9rem;
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .featured-pkg-features .chk { color: var(--sun); }
+
+    .featured-price {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-price .amt {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: white;
+    }
+
+    .featured-price .per { color: rgba(255,255,255,0.5); }
+
+    /* Package type tabs */
+    .pkg-type-tabs {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Package grid */
+    .pkg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .pkg-card-img {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .pkg-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .pkg-card:hover .pkg-card-img img { transform: scale(1.07); }
+
+    .pkg-card-img .pkg-img-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(12,27,51,0.85);
+      backdrop-filter: blur(4px);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .pkg-card-body { padding: 1.5rem; flex: 1; }
+
+    .pkg-card-body .pkg-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--deep);
+      margin: 0.6rem 0 0.4rem;
+    }
+
+    .pkg-card-body .pkg-desc {
+      color: var(--gray);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .pkg-card-footer {
+      padding: 1rem 1.5rem 1.5rem;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Comparison table */
+    .compare {
+      background: white;
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      box-shadow: 0 4px 24px rgba(12,27,51,0.06);
+      margin-bottom: 3rem;
+      overflow-x: auto;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    .compare-table th {
+      text-align: center;
+      padding: 1rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--deep);
+      border-bottom: 2px solid var(--sand);
+    }
+
+    .compare-table th:first-child { text-align: left; }
+
+    .compare-table td {
+      padding: 0.9rem 1rem;
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .compare-table td:first-child {
+      text-align: left;
+      color: var(--deep);
+      font-weight: 500;
+    }
+
+    .compare-table .yes { color: #22C55E; font-size: 1rem; }
+    .compare-table .no { color: #D1D5DB; font-size: 1rem; }
+
+    .compare-table tr:last-child td { border-bottom: none; }
+
+    .compare-table .highlight-col {
+      background: rgba(255,77,28,0.04);
+    }
+
+    @media (max-width: 768px) {
+      .featured-pkg { grid-template-columns: 1fr; }
+      .featured-pkg-img { height: 220px; }
+      .featured-pkg-content { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<script src="components.js"></script>
+<script>injectNav('packages');</script>
+
+<!-- PAGE HERO -->
+<div class="page-hero" style="background-image:url('https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=1600&q=80'); background-size:cover; background-position:center;">
+  <div style="position:absolute;inset:0;background:rgba(12,27,51,0.68);"></div>
+  <div style="position:relative;z-index:1;text-align:center;padding:0 1.5rem;">
+    <span class="page-hero-tag">Packages</span>
+    <h1>Every Budget.<br>Every Dream.</h1>
+    <p>From budget backpacking to luxury escapes — we have the perfect package for you.</p>
+  </div>
+</div>
+
+<section class="pkg-section">
+
+  <!-- FEATURED -->
+  <div class="featured-pkg">
+    <div class="featured-pkg-img">
+      <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=900&q=80" alt="Patagonia">
+      <span class="featured-badge">⭐ Editor's Pick</span>
+    </div>
+    <div class="featured-pkg-content">
+      <span class="pkg-badge popular" style="width:fit-content; margin-bottom:0.8rem;">Most Popular</span>
+      <div class="pkg-title">Patagonia Odyssey</div>
+      <div class="pkg-sub">14 Days · Chile & Argentina · Small Group (Max 12)</div>
+      <ul class="featured-pkg-features">
+        <li><span class="chk">✓</span> Torres del Paine W-Trek</li>
+        <li><span class="chk">✓</span> Perito Moreno Glacier</li>
+        <li><span class="chk">✓</span> Luxury Eco-Lodges included</li>
+        <li><span class="chk">✓</span> Expert wilderness guide</li>
+        <li><span class="chk">✓</span> All meals & transfers</li>
+      </ul>
+      <div class="featured-price">
+        <span class="amt">$3,499</span>
+        <span class="per">/ person</span>
+      </div>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap;">
+        <a href="contact.html" class="btn btn-primary"><i class="fas fa-compass"></i> Book Now</a>
+        <a href="contact.html" class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);">Enquire</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TYPE FILTERS -->
+  <div class="pkg-section-header">
+    <span class="section-tag">All Packages</span>
+    <h2 class="section-title">Find Your Perfect Escape</h2>
+    <p>Curated packages at every price point, for every type of traveler.</p>
+  </div>
+
+  <div class="pkg-type-tabs">
+    <button class="filter-tab active" onclick="filterPkgs('all', this)">All</button>
+    <button class="filter-tab" onclick="filterPkgs('adventure', this)">🏔 Adventure</button>
+    <button class="filter-tab" onclick="filterPkgs('luxury', this)">💎 Luxury</button>
+    <button class="filter-tab" onclick="filterPkgs('cultural', this)">🏛 Cultural</button>
+    <button class="filter-tab" onclick="filterPkgs('beach', this)">🏖 Beach</button>
+    <button class="filter-tab" onclick="filterPkgs('wildlife', this)">🦁 Wildlife</button>
+  </div>
+
+  <!-- PACKAGE GRID -->
+  <div class="pkg-grid" id="pkgGrid">
+
+    <div class="pkg-card" data-type="adventure">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1469521669194-babb45599def?auto=format&fit=crop&w=600&q=80" alt="Swiss Alps">
+        <span class="pkg-img-badge">7 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge popular">Popular</span>
+        <div class="pkg-title">Alpine Adventure</div>
+        <div class="pkg-desc">Conquer the Swiss Alps with expert guides. Hiking, skiing, and glacier walks through Europe's most dramatic mountain scenery.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>5-Star Mountain Lodge</li>
+          <li><span class="check fas fa-check"></span>Daily Guided Hikes</li>
+          <li><span class="check fas fa-check"></span>Breakfast & Dinner</li>
+          <li><span class="check fas fa-check"></span>Airport Transfers</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$1,299</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pkg-card" data-type="beach">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80" alt="Maldives">
+        <span class="pkg-img-badge">10 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge best">Best Value</span>
+        <div class="pkg-title">Maldives Serenity</div>
+        <div class="pkg-desc">Your own overwater bungalow above a crystal lagoon. Snorkelling, spa treatments, and the most peaceful sunsets you'll ever witness.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>Overwater Villa</li>
+          <li><span class="check fas fa-check"></span>All-Inclusive Dining</li>
+          <li><span class="check fas fa-check"></span>Snorkelling & Water Sports</li>
+          <li><span class="check fas fa-check"></span>Couples Spa Package</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$2,499</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pkg-card" data-type="cultural">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80" alt="Japan">
+        <span class="pkg-img-badge">12 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge new">New</span>
+        <div class="pkg-title">Japan Cultural Immersion</div>
+        <div class="pkg-desc">Tokyo, Kyoto, and Osaka in one seamless journey. Tea ceremonies, temple walks, and the finest ramen you've ever tasted.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>Boutique Ryokan Stays</li>
+          <li><span class="check fas fa-check"></span>Private Cultural Guide</li>
+          <li><span class="check fas fa-check"></span>JR Rail Pass Included</li>
+          <li><span class="check fas fa-check"></span>Mount Fuji Day Trip</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$2,199</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pkg-card" data-type="wildlife">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=600&q=80" alt="Safari">
+        <span class="pkg-img-badge">8 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge popular">Popular</span>
+        <div class="pkg-title">Serengeti Safari</div>
+        <div class="pkg-desc">Twice-daily game drives across the Serengeti Plains. Witness the Big Five in their natural habitat from luxury tented camps.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>Luxury Tented Camp</li>
+          <li><span class="check fas fa-check"></span>Expert Safari Guide</li>
+          <li><span class="check fas fa-check"></span>All Meals Included</li>
+          <li><span class="check fas fa-check"></span>Bush Sundowner Drinks</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$3,199</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pkg-card" data-type="luxury">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=600&q=80" alt="Santorini">
+        <span class="pkg-img-badge">9 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge best">Luxury</span>
+        <div class="pkg-title">Greek Island Hopper</div>
+        <div class="pkg-desc">Santorini, Mykonos, and Crete with private yacht transfers. Infinity pools, Michelin-starred dining, and flawless Aegean sunsets.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>5-Star Cave Hotels</li>
+          <li><span class="check fas fa-check"></span>Private Yacht Transfers</li>
+          <li><span class="check fas fa-check"></span>Personal Concierge</li>
+          <li><span class="check fas fa-check"></span>Fine Dining Every Night</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$4,299</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pkg-card" data-type="adventure">
+      <div class="pkg-card-img">
+        <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=600&q=80" alt="Machu Picchu">
+        <span class="pkg-img-badge">11 Days</span>
+      </div>
+      <div class="pkg-card-body">
+        <span class="pkg-badge new">New</span>
+        <div class="pkg-title">Inca Trail Trek</div>
+        <div class="pkg-desc">The legendary 4-day trek through cloud forest and ancient ruins, culminating in the iconic Sun Gate reveal of Machu Picchu.</div>
+        <ul class="pkg-features">
+          <li><span class="check fas fa-check"></span>Official Inca Trail Permit</li>
+          <li><span class="check fas fa-check"></span>Certified Trek Guide</li>
+          <li><span class="check fas fa-check"></span>All Camping Equipment</li>
+          <li><span class="check fas fa-check"></span>Lima City Stay</li>
+        </ul>
+      </div>
+      <div class="pkg-card-footer">
+        <div class="price-from">From<strong>$1,899</strong></div>
+        <a href="contact.html" class="btn btn-primary" style="padding:9px 22px;font-size:0.85rem;">Enquire Now</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="compare">
+    <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--deep); margin-bottom:1.5rem; text-align:center;">Package Comparison</h3>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Features</th>
+          <th>Explorer<br><small style="color:var(--gray);font-family:'DM Sans',sans-serif;">From $799</small></th>
+          <th class="highlight-col">Adventurer<br><small style="color:var(--fire);font-family:'DM Sans',sans-serif;">From $1,499</small></th>
+          <th>Luxury<br><small style="color:var(--gray);font-family:'DM Sans',sans-serif;">From $2,999</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Hotel Accommodation</td>
+          <td>3-Star</td>
+          <td class="highlight-col">4-Star</td>
+          <td>5-Star / Boutique</td>
+        </tr>
+        <tr>
+          <td>Guided Tours</td>
+          <td><span class="yes">✓</span></td>
+          <td class="highlight-col"><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Meals Included</td>
+          <td>Breakfast</td>
+          <td class="highlight-col">B&D</td>
+          <td>All-Inclusive</td>
+        </tr>
+        <tr>
+          <td>Airport Transfers</td>
+          <td><span class="yes">✓</span></td>
+          <td class="highlight-col"><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Travel Insurance</td>
+          <td><span class="no">✗</span></td>
+          <td class="highlight-col"><span class="yes">✓</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>Private Guide</td>
+          <td><span class="no">✗</span></td>
+          <td class="highlight-col"><span class="no">✗</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td>24/7 Concierge</td>
+          <td><span class="no">✗</span></td>
+          <td class="highlight-col"><span class="no">✗</span></td>
+          <td><span class="yes">✓</span></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><a href="contact.html" class="btn btn-outline" style="color:var(--deep);border-color:#E5E7EB;padding:8px 20px;font-size:0.82rem;">Book</a></td>
+          <td class="highlight-col"><a href="contact.html" class="btn btn-primary" style="padding:8px 20px;font-size:0.82rem;">Book</a></td>
+          <td><a href="contact.html" class="btn btn-outline" style="color:var(--deep);border-color:#E5E7EB;padding:8px 20px;font-size:0.82rem;">Book</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+<script>injectFooter();</script>
+<script src="script.js"></script>
+<script>
+  function filterPkgs(type, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.pkg-card').forEach(card => {
+      const match = type === 'all' || card.dataset.type === type;
+      card.style.display = match ? 'flex' : 'none';
+    });
+  }
+  // Ensure all cards are flex by default
+  document.querySelectorAll('.pkg-card').forEach(c => c.style.display = 'flex');
+</script>
+</body>
+</html>
